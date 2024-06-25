@@ -15,7 +15,7 @@ import path from 'path'
 import config from './s3b.config.js'
 
 
-import StaticRouter from './src/routes/static/index.js'
+
 import BucketRouter from './src/routes/bucket.router.js'
 import FileRouter from './src/routes/file.router.js'
 import AuthRouter from './src/routes/auth.route.js'
@@ -24,8 +24,6 @@ import AuthRouter from './src/routes/auth.route.js'
 
 // Express Server
 const app = express();
-app.set('view engine', 'ejs');
-app.set("views", path.join(path.resolve('src'), "views"));
 
 
 // Parsers...
@@ -38,19 +36,23 @@ app.use(cors({ credentials: true, origin: config.TRUSTED_HOST }));
 
 
 // Static Dir
-app.use(express.static(path.join(path.resolve('src'), "public")));
+app.use(express.static('./public'));
 app.use(express.static(config.BUCKET_PATH));
 
 
 
-// Static Routes
-app.use(`/`, StaticRouter);
 
 // API Routes
 app.use(`${config.API_BASE}/auth`, AuthRouter);
 app.use(`${config.API_BASE}/bucket`, BucketRouter);
 app.use(`${config.API_BASE}/file`, FileRouter);
 
+
+// Static Routes
+// Home page
+app.use(`/`, (req, res) => {
+    res.sendFile(path.join(path.resolve('public'), 'template', 'index.html'))
+});
 
 
 

@@ -1,14 +1,140 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <title>s3b-server</title>
+    <style>
+        .code {
+            padding: 3px 7px;
+            background: #363d49;
+            border-radius: 5px;
+        }
+
+        .repo-details {
+            border: 1px solid #333333;
+            padding: 20px;
+            border-radius: 5px;
+            max-width: 600px;
+            margin: auto;
+        }
+    </style>
 </head>
 
-<body>
-    s3b-server
+<body class="bg-dark text-light d-flex flex-column  justify-content-between">
+    <div>
+        <div class="text-center py-3 " style="border-bottom: 0px solid gray;">
+            <h1 class="">Welcome to <span class="text-dark badge" style="background: orange;">s3b-server</span></h1>
+            <pre class="border-bottom d-inline">A Self Hosted S3 Bucket</pre>
+        </div>
+        <section class="w-25 mt-5  mx-auto border  rounded-3 py-2 px-3">
+            <div class="text-center mb-4">
+                <h3 class="border-bottom d-inline ">Getting Started</h3>
+            </div>
+
+
+            <div class="mb-4">
+                <p class="mb-1"><strong>1. Create admin user</strong></p>
+                <pre class="code">$ <span class="text-warning">s3b-server</span> create-admin</pre>
+            </div>
+
+            <div class="mb-4">
+                <p class="mb-1"><strong>2. Login as admin</strong></p>
+                <pre class="code">$ <span class="text-warning">s3b-server</span> login</pre>
+            </div>
+
+            <div class="mb-4">
+                <p class="mb-1"><strong>3. Create Bucket to get secret keys</strong></p>
+                <pre class="code"><span class="text-success">{</span>
+    <span class="text-warning">apiKey</span>:******************,
+    <span class="text-warning">apiSecret</span>:**************************,
+    <span class="text-warning">bucketId</span>:******************
+<span class="text-success">}</span></pre>
+            </div>
+
+            <div class="mb-4">
+                <p class="mb-1"><strong>4. Install s3b for client</strong></p>
+                <pre class="code">$ <span class="text-warning">npm</span> install s3b</pre>
+            </div>
+
+            <div class="mb-4">
+                <p class="mb-1"><strong>5. Use secret keys to configure s3b</strong></p>
+                <small><a target="_blank" href="https://github.com/CodingSamrat/s3b">Visit Here</a> for detailed
+                    documentation</small>
+            </div>
+        </section>
+    </div>
+
+    <section class="w-50 mx-auto " style="margin-top: 6rem;">
+        <div class="text-center mb-3">
+            <h2 class="border-bottom d-inline">Contribute to Our Project</h2>
+        </div>
+        <div class="" style="font-size: 14px; line-height: 14px; color: gray;">
+            <p class="text-center">You are always welcome to contributing to our project! <br>
+                Contributions from the community are what make open source projects thrive.</p>
+        </div>
+
+        <div class="repo-details text-center">
+            <a class="text-light " href="https://github.com/CodingSamrat/s3b-server">
+                <img style="width: 2.5rem; aspect-ratio: 1/1;  margin-right: 6px;" src="/img/github.svg" alt="">
+                <h3 id="repo-name" class="">Loading...</h3>
+            </a>
+            <p id="repo-description">loading...</p>
+
+            <div style="font-size: 14px; line-height: 14px; color: gray;">
+                <div class="d-flex gap-5 justify-content-center my-3">
+                    <p> Stars: <span id="repo-stars">...</span></p>
+                    <p>Forks: <span id="repo-forks">...</span></p>
+                    <p>Open Issues: <span id="repo-issues">...</span></p>
+                </div>
+                <p>Last Updated: <span id="repo-updated"></span></p>
+            </div>
+        </div>
+    </section>
+
+    <div class="h-5" style="height: 3rem;"></div>
+    <footer class="fixed-bottom bg-dark py-1" style="border-top: 1px solid gray; ">
+        <div class="container d-flex gap-5 justify-content-center">
+            <small><a href="https://github.com/CodingSamrat/s3b">https://github.com/CodingSamrat/s3b</a></small>
+            <small><a href="https://www.npmjs.com/package/s3b">https://www.npmjs.com/package/s3b</a></small>
+            <small><a href="https://github.com/CodingSamrat/s3b">https://github.com/CodingSamrat/s3b-server</a></small>
+        </div>
+    </footer>
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
 </body>
+<script>
+    // GitHub repository details
+    const owner = 'CodingSamrat';
+    const repo = 's3b-server';
+
+    // Function to fetch repository details
+    async function fetchRepoDetails() {
+        const response = await fetch(`https://api.github.com/repos/${owner}/${repo}`);
+        const data = await response.json();
+
+        // Display repository details
+        document.getElementById('repo-name').innerText = data.name;
+        document.getElementById('repo-description').innerText = data.description;
+        document.getElementById('repo-stars').innerText = data.stargazers_count;
+        document.getElementById('repo-forks').innerText = data.forks_count;
+        document.getElementById('repo-issues').innerText = data.open_issues_count;
+        document.getElementById('repo-updated').innerText = new Date(data.updated_at).toLocaleString();
+    }
+
+    // Fetch and display repository details on page load
+    fetchRepoDetails();
+</script>
 
 </html>
