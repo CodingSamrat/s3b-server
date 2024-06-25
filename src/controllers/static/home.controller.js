@@ -9,7 +9,7 @@
 // =================================================================================
 export async function homePage(req, res) {
     try {
-        res.render('index', { foo: 'FOO' });
+        res.render('home', { foo: 'FOO' });
     } catch (error) {
         console.log(error)
     }
