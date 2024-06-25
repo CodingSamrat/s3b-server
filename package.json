@@ -1,0 +1,43 @@
+{
+	"name": "s3b-server",
+	"version": "0.0.1",
+	"description": "Coding Samrat Backend Server",
+	"main": "index.js",
+	"type": "module",
+	"bin": {
+		"s3b-server": "./src/command/index.js"
+	},
+	"scripts": {
+		"start": "nodemon index.js",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/CodingSamrat/s3b-server.git"
+	},
+	"author": "Sam (Coding Samrat)",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/CodingSamrat/s3b-server/issues"
+	},
+	"homepage": "https://github.com/CodingSamrat/s3b-server#readme",
+	"dependencies": {
+		"bcryptjs": "^2.4.3",
+		"body-parser": "^1.20.2",
+		"bson": "^6.7.0",
+		"cookie-parser": "^1.4.6",
+		"cors": "^2.8.5",
+		"directory-tree": "^3.5.1",
+		"dotenv": "^16.4.5",
+		"express": "^4.18.3",
+		"filexdb": "^0.0.6",
+		"jsonwebtoken": "^9.0.2",
+		"mongoose": "^8.2.0",
+		"multer": "^1.4.5-lts.1",
+		"sequelize": "^6.37.3",
+		"sqlite3": "^5.1.7"
+	},
+	"devDependencies": {
+		"nodemon": "^3.1.0"
+	}
+}
