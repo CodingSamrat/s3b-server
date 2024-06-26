@@ -15,6 +15,7 @@ export async function CliHomeRoute() {
             choices: [
                 { name: '> Bucket', value: 'bucket' },
                 { name: '> User', value: 'user' },
+                { name: '> Update Password', value: 'password' },
                 { name: '> Logout', value: 'logout' },
                 { name: '> Exit', value: 'exit' }
             ],
@@ -30,18 +31,11 @@ export async function CliHomeRoute() {
         case 'user':
             // const users = await getAllUsers()
             await CliUserRoute()
-            // for (let i = 0; i < users.length; i++) {
-            //     const user = users[i];
 
-            //     console.log()
-            //     console.log(`--------------------- - - - ---------------------`)
-            //     console.log('Name      :', user.fullName)
-            //     console.log('username  :', user.username)
-            //     console.log('Email     :', user.email)
-            //     console.log('Mobile    :', user.mobile)
-            //     console.log('Admin     :', user.isAdmin)
-            //     console.log(`--------------------- - - - ---------------------\n`)
-            // }
+            break;
+        case 'password':
+            await logoutUser()
+            await AdminPanel()
             break;
         case 'logout':
             await logoutUser()
