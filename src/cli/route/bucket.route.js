@@ -2,7 +2,7 @@ import inquirer from 'inquirer';
 import { logoutUser } from '../helper/authentication.js';
 import AdminPanel from '../index.js';
 import { CliHomeRoute } from './home.route.js';
-import { createBucket, getAllBucket } from '../helper/bucket.js';
+import { createBucket, deleteBucket, getAllBucket } from '../helper/bucket.js';
 import { takeInput } from '../helper/input.js';
 
 
@@ -29,7 +29,7 @@ export async function CliBucketRoute() {
                 let allBucket = await getAllBucket()
 
                 if (allBucket.length <= 0) {
-                    console.log('Bucket List Empty')
+                    console.log('Bucket List Empty ----------------------')
                     console.log('You don\'t have any bucket. Create Now\n')
                 }
                 else {
@@ -117,6 +117,8 @@ export async function CliBucketRoute() {
 
                                     if (text === 'DELETE MY BUCKET') {
                                         console.log('delete bucket', bucket._id)
+                                        const res = await deleteBucket(bucket._id)
+                                        console.log(res)
 
                                         await bucketList()
                                     } else {

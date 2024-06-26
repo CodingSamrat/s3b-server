@@ -122,16 +122,16 @@ export const GetAllBucket = async (req, res) => {
 
 
 // =================================================================================
-// Name         : DeleteApp
-// Description  : Register New User
+// Name         : DeleteBucketById
+// Description  : Delete Bucket By Id
 // Method       : DELETE
 // Route        : /api/v1/bucket/delete/:id
 // Access       : protected [auth]
 // =================================================================================
-export const DeleteBucket = async (req, res) => {
+export const DeleteBucketById = async (req, res) => {
     const bucketId = req.params.id
     try {
-        const bucket = await Bucket.findByIdAndDelete(bucketId)
+        const bucket = await Bucket.deleteOne({ _id: bucketId })
 
         let bucketPath = path.join(BUCKET_PATH, bucket.bucketId.toString())
 

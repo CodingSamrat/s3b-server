@@ -27,11 +27,11 @@ export async function getAllBucket() {
 
 
 
-export async function deleteBucket() {
+export async function deleteBucket(bucketId) {
     try {
-        const { data } = await ApiManager.delete('/bucket/delete')
+        const { data } = await ApiManager.delete(`/bucket/delete/${bucketId}`)
 
-        return { allBucket: data.allBucket }
+        return data.message
     } catch (error) {
         console.log('> ', error.response.data.error)
     }
