@@ -81,13 +81,13 @@ export const LoginUser = async (req, res) => {
 
         const { username, password } = await req.body
 
-        // console.log(await req.body)
+        console.log(await req.body)
 
         if (!username || !password) {
             return response(res, 401, { error: 'All fields are required' })
         }
 
-
+        // console.log(await User.find())
         // TODO: Check user exist or not
         const user = await User.findOne({ username })
 
@@ -197,6 +197,22 @@ export const Logout = async (req, res) => {
         }
     )
     return response(res, 200, { message: 'Logout successful' })
+
+}
+
+
+
+
+// =================================================================================
+// Name         : GetCurrentUser
+// Description  : ...
+// Method       : GET
+// Route        : /api/v1/auth/current
+// Access       : protected [auth]
+// =================================================================================
+export const GetCurrentUser = async (req, res) => {
+    const user = await req.user
+    return response(res, 200, { message: 'Current User', user })
 
 }
 

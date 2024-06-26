@@ -22,6 +22,7 @@
 	},
 	"homepage": "https://github.com/CodingSamrat/s3b-server#readme",
 	"dependencies": {
+		"axios": "^1.7.2",
 		"bcryptjs": "^2.4.3",
 		"body-parser": "^1.20.2",
 		"bson": "^6.7.0",
@@ -31,6 +32,7 @@
 		"dotenv": "^16.4.5",
 		"express": "^4.18.3",
 		"filexdb": "^0.0.6",
+		"inquirer": "^9.2.23",
 		"jsonwebtoken": "^9.0.2",
 		"mongoose": "^8.2.0",
 		"multer": "^1.4.5-lts.1",
