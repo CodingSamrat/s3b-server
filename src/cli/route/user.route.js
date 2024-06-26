@@ -1,12 +1,10 @@
 import inquirer from 'inquirer';
-import { logoutUser } from '../helper/authentication.js';
-import AdminPanel from '../index.js';
 import { CliHomeRoute } from './home.route.js';
-import { createBucket, deleteBucket, getAllBucket } from '../helper/bucket.js';
-import { takeInput } from '../helper/input.js';
+import { createUser, deleteUser, getAllUsers } from '../helper/user.js';
+import { takeInput, takePasswordInput } from '../helper/input.js';
 
 
-export async function CliBucketRoute() {
+export async function CliUserRoute() {
     const answers = await inquirer.prompt([
         {
             type: 'list',
@@ -14,7 +12,7 @@ export async function CliBucketRoute() {
             message: 'What would you like to do?',
             choices: [
                 { name: '> List', value: 'list' },
-                { name: '> Create', value: 'create' },
+                { name: '> Add user', value: 'add' },
                 { name: '> Back', value: 'back' },
                 { name: '> Exit', value: 'exit' }
             ],
@@ -24,25 +22,25 @@ export async function CliBucketRoute() {
 
     switch (answers.action) {
         case 'list':
-            async function bucketList() {
-                let allBucket = await getAllBucket()
+            async function userList() {
+                let allUser = await getAllUsers()
 
-                if (allBucket.length <= 0) {
-                    console.log('Bucket List Empty ----------------------')
-                    console.log('You don\'t have any bucket. Create Now\n')
+                if (allUser.length <= 0) {
+                    console.log('User List Empty ----------------------')
+                    console.log('You don\'t have any user. Create Now\n')
                 }
                 else {
                     let myChoices = []
 
-                    await allBucket.map(async (bucket, i) => {
-                        await myChoices.push({ name: `${i + 1}. ${bucket.projectName} - ${bucket.bucketId}`, value: bucket.bucketId })
+                    await allUser.map(async (user, i) => {
+                        await myChoices.push({ name: ` @ ${user.username}${user.isAdmin ? '*' : ''} - ${user.fullName}`, value: user._id })
                     })
 
                     const answers = await inquirer.prompt([
                         {
                             type: 'list',
                             name: 'action',
-                            message: 'Select bucket to get details',
+                            message: 'Select user to get details',
                             choices: [
                                 ...myChoices,
                                 { name: '> Back', value: 'back' },
@@ -52,17 +50,18 @@ export async function CliBucketRoute() {
                     ]);
 
 
-                    for (let i = 0; i < allBucket.length; i++) {
-                        const bucket = allBucket[i];
+                    for (let i = 0; i < allUser.length; i++) {
+                        const user = allUser[i];
 
 
-                        if (answers.action === bucket.bucketId) {
+                        if (answers.action === user._id) {
                             console.log()
-                            console.log(bucket.projectName.toUpperCase())
                             console.log(`--------------------- - - - ---------------------`)
-                            console.log('bucketId  :', bucket.bucketId)
-                            console.log('apiKey    :', bucket.apiKey)
-                            console.log('apiSecret :', bucket.apiSecret)
+                            console.log('Name     :', user.fullName)
+                            console.log('Username :', user.username)
+                            console.log('Email    :', user.email)
+                            console.log('Mobile   :', user.mobile)
+                            console.log('Admin    :', user.isAdmin)
                             console.log(`--------------------- - - - ---------------------\n`)
 
                             const answers = await inquirer.prompt([
@@ -81,8 +80,8 @@ export async function CliBucketRoute() {
                             switch (answers.action) {
                                 case 'delete':
                                     console.log('')
-                                    console.log('                       DANGER                       ')
                                     console.log('----------------------------------------------------')
+                                    console.log('                       DANGER                       ')
                                     console.log('  ⚠︎  Think again! You can\'t restore this change  ⚠︎ ')
                                     console.log('----------------------------------------------------')
 
@@ -94,29 +93,28 @@ export async function CliBucketRoute() {
 
                                     // ...
                                     console.log('')
-                                    console.log('              Confirm to Delete Bucket              ')
                                     console.log('----------------------------------------------------')
-                                    console.log('  ⚠︎       Write bellow line to delete bucket      ⚠︎ ')
-                                    console.log('  ⚠︎                DELETE MY BUCKET               ⚠︎ ')
-                                    console.log('  ⚠︎  Think again! You can\'t restore this change  ⚠︎ ')
+                                    console.log('             ⚠︎  Confirm to Delete User ⚠︎            ')
+                                    console.log('          Write bellow line to delete user          ')
+                                    console.log('                        DELETE                      ')
                                     console.log('----------------------------------------------------')
 
-                                    const text = await takeInput(' > ')
+                                    const text = await takeInput(' Write [DELETE]> ')
 
-                                    if (text === 'DELETE MY BUCKET') {
-                                        const res = await deleteBucket(bucket._id)
-                                        console.log(res)
+                                    if (text === 'DELETE') {
+                                        const res = await deleteUser(user._id)
+                                        console.log(res.message, `@${res.user.username}`)
                                         console.log()
 
-                                        await bucketList()
+                                        await userList()
                                     } else {
                                         console.log('Wrong Input! Try again')
-                                        await bucketList()
+                                        await userList()
                                     }
 
                                     break;
                                 case 'back':
-                                    await bucketList()
+                                    await userList()
                                     break;
                                 case 'exit':
                                     console.log('Goodbye!\n');
@@ -124,7 +122,7 @@ export async function CliBucketRoute() {
                             }
                         }
                         else if (answers.action === 'back') {
-                            await CliBucketRoute()
+                            await CliUserRoute()
                         }
                         else if (answers.action === 'exit') {
                             console.log('Goodbye!\n');
@@ -135,12 +133,36 @@ export async function CliBucketRoute() {
                 }
             }
 
-            await bucketList()
+            await userList()
             break;
-        case 'create':
-            const projectName = await takeInput('Project Name: ')
-            const res = await createBucket(projectName)
-            console.log(res)
+        case 'add':
+            console.log('Enter user details ---------------------')
+            let username = await takeInput('Username: ')
+            let password = await takePasswordInput('Password: ')
+            let fullName = await takeInput('Full Name: ')
+            let email = await takeInput('email: ')
+            let mobile = await takeInput('mobile: ')
+            let isAdmin = await takeInput('isAdmin [y/n]: ')
+            isAdmin = isAdmin.toLowerCase() === 'y'
+
+            const payload = {
+                username,
+                fullName,
+                password,
+                email,
+                mobile,
+                isAdmin
+            }
+
+
+            const yn = await takeInput('Confirm to add new user? [y/n]> ')
+            if (yn.toLowerCase() !== 'y') {
+                await userList()
+            }
+
+
+            const res = await createUser(payload)
+            console.log(res.message)
             break;
         case 'back':
             await CliHomeRoute()
@@ -153,19 +175,19 @@ export async function CliBucketRoute() {
 
 
     // Recursive call to main to keep the CLI running
-    await CliBucketRoute();
+    await CliUserRoute();
 };
 
 
 
-async function CliBucketListRoute() {
+async function CliUserListRoute() {
     const answers = await inquirer.prompt([
         {
             type: 'list',
             name: 'action',
             message: 'What would you like to do?',
             choices: [
-                { name: '> list', value: 'bucket' },
+                { name: '> list', value: 'user' },
                 { name: '> Back', value: 'back' },
                 { name: '> Exit', value: 'exit' }
             ],
@@ -174,7 +196,7 @@ async function CliBucketListRoute() {
 
 
     switch (answers.action) {
-        case 'bucket':
+        case 'user':
 
 
             break;
@@ -183,7 +205,7 @@ async function CliBucketListRoute() {
 
             break;
         case 'back':
-            await CliBucketRoute()
+            await CliUserRoute()
             break;
         case 'exit':
             console.log('Goodbye!\n');
@@ -193,5 +215,5 @@ async function CliBucketListRoute() {
 
 
     // Recursive call to main to keep the CLI running
-    await CliBucketRoute();
+    await CliUserRoute();
 };

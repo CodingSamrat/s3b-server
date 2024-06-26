@@ -2,6 +2,8 @@ import inquirer from 'inquirer';
 import { logoutUser } from '../helper/authentication.js';
 import AdminPanel from '../index.js';
 import { CliBucketRoute } from './bucket.route.js';
+import { getAllUsers } from '../helper/user.js';
+import { CliUserRoute } from './user.route.js';
 
 
 export async function CliHomeRoute() {
@@ -26,8 +28,20 @@ export async function CliHomeRoute() {
 
             break;
         case 'user':
+            // const users = await getAllUsers()
+            await CliUserRoute()
+            // for (let i = 0; i < users.length; i++) {
+            //     const user = users[i];
 
-
+            //     console.log()
+            //     console.log(`--------------------- - - - ---------------------`)
+            //     console.log('Name      :', user.fullName)
+            //     console.log('username  :', user.username)
+            //     console.log('Email     :', user.email)
+            //     console.log('Mobile    :', user.mobile)
+            //     console.log('Admin     :', user.isAdmin)
+            //     console.log(`--------------------- - - - ---------------------\n`)
+            // }
             break;
         case 'logout':
             await logoutUser()

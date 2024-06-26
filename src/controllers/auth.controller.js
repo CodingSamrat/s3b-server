@@ -24,7 +24,7 @@ import { AuthToken } from '../constants.js';
 // Description  : Register New User
 // Method       : POST
 // Route        : /api/v1/auth/create
-// Access       : public
+// Access       : protected [auth]
 // =================================================================================
 export const CreateUser = async (req, res) => {
     try {
@@ -58,6 +58,32 @@ export const CreateUser = async (req, res) => {
 
         // TODO: Send token with response
         return response(res, 200, { message: `User registered with username - ${username}`, user })
+    } catch (error) {
+        console.log(error)
+        return response(res, 500, { error: 'Internal Server Error' })
+    }
+}
+
+
+// =================================================================================
+// Name         : DeleteUser
+// Description  : Delete User
+// Method       : DELETE
+// Route        : /api/v1/auth/delete/:id
+// Access       : protected [auth]
+// =================================================================================
+export const DeleteUser = async (req, res) => {
+    const id = req.params.id
+
+    try {
+        if (!id) {
+            return response(res, 401, { error: 'Invalid request' })
+        }
+
+        const user = await User.findByIdAndDelete(id)
+
+        // TODO: Send token with response
+        return response(res, 200, { message: `User deleted!`, user })
     } catch (error) {
         console.log(error)
         return response(res, 500, { error: 'Internal Server Error' })
@@ -213,6 +239,20 @@ export const Logout = async (req, res) => {
 export const GetCurrentUser = async (req, res) => {
     const user = await req.user
     return response(res, 200, { message: 'Current User', user })
+
+}
+
+
+// =================================================================================
+// Name         : GetAllUser
+// Description  : ...
+// Method       : GET
+// Route        : /api/v1/auth/get
+// Access       : protected [auth]
+// =================================================================================
+export const GetAllUser = async (req, res) => {
+    const users = await User.find()
+    return response(res, 200, { message: 'All Users', users })
 
 }
 
