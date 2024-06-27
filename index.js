@@ -17,7 +17,7 @@ import config from './s3b.config.js'
 
 
 import BucketRouter from './src/routes/bucket.router.js'
-import FileRouter from './src/routes/file.router.js'
+import ClientFileRouter from './src/routes/client.file.router.js'
 import AuthRouter from './src/routes/auth.route.js'
 
 
@@ -45,7 +45,7 @@ app.use(express.static(config.BUCKET_PATH));
 // API Routes
 app.use(`${config.API_BASE}/auth`, AuthRouter);
 app.use(`${config.API_BASE}/bucket`, BucketRouter);
-app.use(`${config.API_BASE}/file`, FileRouter);
+app.use(`${config.API_BASE}/client/file`, ClientFileRouter);
 
 
 // Static Routes
@@ -53,6 +53,10 @@ app.use(`${config.API_BASE}/file`, FileRouter);
 app.use(`/`, (req, res) => {
     res.sendFile(path.join(path.resolve('public'), 'template', 'index.html'))
 });
+
+
+
+
 
 
 

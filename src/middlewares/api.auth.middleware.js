@@ -18,7 +18,7 @@ export const apiKeyAuth = async (req, res, next) => {
     try {
         const bucket = await Bucket.findOne({ apiKey, apiSecret, bucketId });
 
-        if (!bucket) {
+        if (!bucket._id) {
             return response(res, 403, { error: 'API key is not valid' })
         }
 

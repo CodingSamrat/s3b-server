@@ -66,4 +66,10 @@ export async function getFileTree(dirPath) {
 
 
 
-
+export async function separateFilenameAndExt(filename) {
+    const parsedPath = path.parse(filename);
+    return {
+        name: parsedPath.name,
+        ext: parsedPath.ext
+    };
+};
