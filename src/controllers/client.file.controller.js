@@ -171,7 +171,7 @@ export const DeleteFile = async (req, res) => {
 
 
 
-        return response(res, 200, { message: 'File deleted!', filePath })
+        return response(res, 200, { message: 'File deleted!', filePath, success: true })
     } catch (error) {
         console.log(error)
         return response(res, 500, { error: 'Internal Server Error' })
