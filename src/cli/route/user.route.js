@@ -1,6 +1,6 @@
 import inquirer from 'inquirer';
 import { CliHomeRoute } from './home.route.js';
-import { createUser, deleteUser, getAllUsers } from '../helper/user.js';
+import { createUser, deleteUser, getAllUsers, promptCreateUser } from '../helper/user.js';
 import { takeInput, takePasswordInput } from '../helper/input.js';
 
 
@@ -136,33 +136,29 @@ export async function CliUserRoute() {
             await userList()
             break;
         case 'add':
-            console.log('Enter user details ---------------------')
-            let username = await takeInput('Username: ')
-            let password = await takePasswordInput('Password: ')
-            let fullName = await takeInput('Full Name: ')
-            let email = await takeInput('email: ')
-            let mobile = await takeInput('mobile: ')
-            let isAdmin = await takeInput('isAdmin [y/n]: ')
-            isAdmin = isAdmin.toLowerCase() === 'y'
+            console.log('\nEnter user details ')
+            console.log('------------------------------------')
+            const payload = await promptCreateUser()
 
-            const payload = {
-                username,
-                fullName,
-                password,
-                email,
-                mobile,
-                isAdmin
-            }
+            console.log('\nUser Details ')
+            console.log('------------------------------------')
+            console.log('Username   :', payload.username)
+            console.log('Full Name  :', payload.fullName)
+            console.log('Email      :', payload.email)
+            console.log('Mobile     :', payload.mobile)
+            console.log('Admin      :', payload.isAdmin)
 
 
-            const yn = await takeInput('Confirm to add new user? [y/n]> ')
-            if (yn.toLowerCase() !== 'y') {
+            const yn = await takeInput('\n\n? Confirm: [y/N]> ')
+            if (yn.toLowerCase() === 'y') {
+                const res = await createUser(payload)
+                console.log(res.message)
+            } else {
+                console.log('\nUser Details Discarded')
                 await userList()
             }
 
 
-            const res = await createUser(payload)
-            console.log(res.message)
             break;
         case 'back':
             await CliHomeRoute()

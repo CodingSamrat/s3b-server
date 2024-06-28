@@ -53,7 +53,7 @@ export default class CLI {
 
             try {
                 await this.runMiddlewares(argv);
-                cmd.handler(parsedArgs.args);
+                await cmd.handler(parsedArgs.args);
             } catch (err) {
                 console.error('Error in middleware:', err);
             }

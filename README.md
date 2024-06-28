@@ -1,4 +1,4 @@
-# Self Hosted s3 Bucket
+# s3b-server
 
 ### Auth Route
 - register

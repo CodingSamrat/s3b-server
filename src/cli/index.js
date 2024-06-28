@@ -1,7 +1,5 @@
 import { CliHomeRoute } from "./route/home.route.js";
-import { isAuth, loginUser } from "./helper/authentication.js";
-
-import { takeInput, takePasswordInput } from "./helper/input.js";
+import { isAuth, loginUser, promptLogin } from "./helper/authentication.js";
 
 
 
@@ -15,8 +13,7 @@ export default async function AdminPanel() {
         else {
             console.log("")
             console.log('Login to s3b admin panel-------------------')
-            const username = await takeInput('Username: ')
-            const password = await takePasswordInput('Password: ')
+            const { password, username } = await promptLogin()
             console.log('')
             const res = await loginUser(username, password)
             if (res.success) {

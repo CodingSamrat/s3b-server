@@ -10,7 +10,7 @@ import { response } from "../libs/response.js";
 import { slugify } from "../libs/slugify.js";
 import path from "path";
 import { directoryExists } from "../libs/filesystem.js";
-import { Bucket } from "../models/index.js";
+import { Bucket } from "../db/index.js";
 import { BUCKET_PATH } from "../../s3b.config.js";
 
 

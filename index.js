@@ -20,10 +20,14 @@ import BucketRouter from './src/routes/bucket.router.js'
 import ClientFileRouter from './src/routes/client.file.router.js'
 import AuthRouter from './src/routes/auth.route.js'
 
-
-
 // Express Server
 const app = express();
+
+
+// MongoDB:
+// if you are using MongoDB then uncomment following lines 
+// import { mongodbConfig } from './src/models/mongodb.js'
+// mongodbConfig()
 
 
 // Parsers...

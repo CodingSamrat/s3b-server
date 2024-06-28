@@ -1,7 +1,7 @@
 
 
 import { response } from "../libs/response.js";
-import { Bucket } from "../models/index.js";
+import { Bucket } from "../db/index.js";
 
 
 export const apiKeyAuth = async (req, res, next) => {

@@ -1,6 +1,4 @@
 import inquirer from 'inquirer';
-import { logoutUser } from '../helper/authentication.js';
-import AdminPanel from '../index.js';
 import { CliHomeRoute } from './home.route.js';
 import { createBucket, deleteBucket, getAllBucket } from '../helper/bucket.js';
 import { takeInput } from '../helper/input.js';

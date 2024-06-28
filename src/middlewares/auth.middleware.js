@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { User } from "../models/index.js";
+import { User } from "../db/index.js";
 import { response } from "../libs/response.js";
 import { ACCESS_TOKEN_SECRET } from "../../s3b.config.js";
 import { AuthToken } from "../constants.js";
@@ -34,8 +34,17 @@ const auth = async (req, res, next) => {
 
     try {
         // Decode Authentication Token
-        const decodedData = jwt.verify(token, ACCESS_TOKEN_SECRET);
-
+        let decodedData = {}
+        try {
+            decodedData = jwt.verify(token, ACCESS_TOKEN_SECRET);
+            // Token is valid
+        } catch (error) {
+            if (error.name === 'TokenExpiredError') {
+                return response(res, 401, { error: 'Session expired!' })
+            } else {
+                console.log('JWT verification error:', error.message);
+            }
+        }
 
         // Find User using decoded User ID
         const authUser = await User.findOne({ username: decodedData.username })

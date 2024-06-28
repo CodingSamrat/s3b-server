@@ -1,59 +1,99 @@
 // adminPrompt.js
-import readline from 'readline';
-import { User } from '../../models/index.js';
+import { User } from '../../db/index.js';
 import { hashPassword } from '../../libs/crypto.js';
+import inquirer from 'inquirer';
 
-export default () => {
-    const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout,
-    });
+export default async () => {
     console.log('')
     console.log('Enter user data to create Admin User -------------')
     console.log('N.B. username & password are required field ------')
     console.log('')
 
 
-    getInfo()
-    function getInfo() {
-        rl.question('Enter username: ', (username) => {
-            rl.question('Enter password: ', (password) => {
-                rl.question('Enter full name: ', (fullName) => {
-                    rl.question('Enter email: ', (email) => {
-                        rl.question('Enter mobile number: ', async (mobile) => {
-
-
-                            try {
-
-                                if (!username || !password) {
-                                    console.log('\nUsername & Password are required!')
-                                    getInfo()
-                                }
-                                else {
-                                    rl.close();
-                                    await createAdmin({ username, password, fullName, email, mobile });
-
-                                }
-
-                            } catch (error) {
-                                console.error('Error creating admin user:', error);
-                            }
-                        });
-                    });
-                });
-            });
-        });
-    }
+    await createAdmin()
 };
 
 
 
+// Function to prompt for user registration
+async function promptRegistration() {
+    // Define the questions for the registration form
+    const questions = [
+        {
+            type: 'input',
+            name: 'username',
+            message: 'Username:',
+            validate: function (value) {
+                if (value.length) {
+                    return true;
+                } else {
+                    return 'Please enter your username.';
+                }
+            }
+        },
+        {
+            type: 'password',
+            name: 'password',
+            message: 'Password:',
+            mask: '*',
+            validate: function (value) {
+                if (value.length) {
+                    return true;
+                } else {
+                    return 'Please enter your password.';
+                }
+            }
+        },
+        {
+            type: 'input',
+            name: 'fullName',
+            message: 'Full name:'
+        },
+        {
+            type: 'input',
+            name: 'email',
+            message: 'Email:',
+            validate: function (value) {
+                // Simple email validation regex
+                const pass = value.match(
+                    /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+                );
+                if (pass) {
+                    return true;
+                } else {
+                    return 'Please enter a valid email address.';
+                }
+            }
+        },
+        {
+            type: 'input',
+            name: 'mobile',
+            message: 'Mobile number:',
+            validate: function (value) {
+                // Simple mobile number validation to check for digits only
+                const pass = value.match(
+                    /^\d+$/
+                );
+                if (pass) {
+                    return true;
+                } else {
+                    return 'Please enter a valid mobile number.';
+                }
+            }
+        }
+    ];
+
+    // Prompt the user with the questions
+    const answers = await inquirer.prompt(questions);
+    return answers;
+
+}
 
 
 
 
-async function createAdmin({ username, password, fullName, email, mobile }) {
-
+async function createAdmin() {
+    const { username, password, fullName, email, mobile } = await promptRegistration()
     try {
         const existingUser = await User.findOne({ username })
 

@@ -12,7 +12,7 @@ import jwt from 'jsonwebtoken'
 import { response } from "../libs/response.js";
 import { hashPassword, comparePassword } from "../libs/crypto.js";
 import { getExpiryTime } from "../libs/timeConverter.js";
-import { User } from '../models/index.js';
+import { User } from '../db/index.js';
 import { ACCESS_TOKEN_EXPIRY, ACCESS_TOKEN_SECRET, DEBUG } from '../../s3b.config.js';
 import { AuthToken } from '../constants.js';
 
