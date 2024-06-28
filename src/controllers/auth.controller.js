@@ -107,7 +107,7 @@ export const LoginUser = async (req, res) => {
 
         const { username, password } = await req.body
 
-        console.log(await req.body)
+        // console.log(await req.body)
 
         if (!username || !password) {
             return response(res, 401, { error: 'All fields are required' })

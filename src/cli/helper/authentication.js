@@ -11,7 +11,7 @@ export async function loginUser(username, password) {
     }
     try {
         const { data } = await ApiManager.post('/auth/login', { username, password })
-        console.log(data)
+
         const aut = data.accessToken
         if (aut) {
             fs.writeFileSync(_getAutPath(), aut)

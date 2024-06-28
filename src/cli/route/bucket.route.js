@@ -25,7 +25,7 @@ export async function CliBucketRoute() {
             async function bucketList() {
                 let allBucket = await getAllBucket()
 
-                if (allBucket.length <= 0) {
+                if (allBucket?.length <= 0) {
                     console.log('Bucket List Empty ----------------------')
                     console.log('You don\'t have any bucket. Create Now\n')
                 }
