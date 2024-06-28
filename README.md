@@ -1,4 +1,6 @@
 # s3b-server
+s3b-server is a robust and flexible server implementation for self-hosted S3 bucket. It provides a streamlined interface for seamless integration, allowing for efficient storage, retrieval, and manipulation of data within self-hosted S3-compatible storage systems. Designed with scalability and performance in mind, s3b-server simplifies the process of handling S3 operations, making it an ideal choice for developers and organizations looking to leverage self-hosted S3 storage solutions.
+
 
 ## Installation
 
