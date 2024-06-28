@@ -2,7 +2,7 @@ import os from 'os'
 import fs from 'fs'
 import path from 'path';
 
-import { HOST_NAME, BUCKET_PATH } from "../../s3b.config.js";
+import { HOST_NAME, BUCKET_PATH, CLOUD_BASE_PATH } from "../../s3b.config.js";
 
 export function directoryExists(directoryName) {
     try {

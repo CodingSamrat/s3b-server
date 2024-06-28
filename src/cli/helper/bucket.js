@@ -5,7 +5,7 @@ export async function createBucket(projectName) {
         const { data } = await ApiManager.post('/bucket/create', { projectName })
         return data?.message
     } catch (error) {
-        console.log('> ', error.response.data.error)
+        console.log('ERROR:', error?.response?.data?.error)
         return 0
     }
 }
@@ -20,7 +20,7 @@ export async function getAllBucket() {
 
         return data.allBucket
     } catch (error) {
-        console.log('> ', error.response.data.error)
+        console.log('ERROR:', error?.response?.data?.error)
     }
 }
 
@@ -33,6 +33,6 @@ export async function deleteBucket(bucketId) {
 
         return data.message
     } catch (error) {
-        console.log('> ', error.response.data.error)
+        console.log('ERROR:', error?.response?.data?.error)
     }
 }

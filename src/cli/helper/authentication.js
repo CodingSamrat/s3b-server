@@ -18,7 +18,7 @@ export async function loginUser(username, password) {
         }
         return { success: true }
     } catch (error) {
-        console.log('ERROR:', error.response.data.error)
+        console.log('ERROR:', error?.response?.data?.error)
         return { success: false }
     }
 
@@ -33,7 +33,7 @@ export async function logoutUser() {
             fs.unlinkSync(_getAutPath())
         }
     } catch (error) {
-        console.log('ERROR:', error.message)
+        console.log('ERROR:', error?.message)
     }
 
 }
@@ -44,14 +44,14 @@ export async function isAuth() {
     try {
         if (fs.existsSync(_getAutPath())) {
             const { data } = await ApiManager.get('/auth/current')
-            if (data.user._id) {
+            if (data?.user?._id) {
                 return true
             }
         } else {
             return false
         }
     } catch (error) {
-        console.log('ERROR:', error.response.data.error)
+        console.log('ERROR:', error?.response?.data?.error)
     }
 
 }
