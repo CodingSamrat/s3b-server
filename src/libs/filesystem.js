@@ -1,3 +1,4 @@
+import os from 'os'
 import fs from 'fs'
 import path from 'path';
 
@@ -28,7 +29,7 @@ export function getStoragePath(storageId) {
 
 
 export function getDownloadURL(filePath) {
-    const relativePath = filePath.replace(`${BUCKET_PATH}\\`, '').replace(/\\/g, '/')
+    const relativePath = filePath.replace(`${CLOUD_BASE_PATH}\\`, '').replace(/\\/g, '/')
     return `${HOST_NAME}/${relativePath}`
 }
 
@@ -36,7 +37,7 @@ export function getDownloadURL(filePath) {
 export async function getFilePath(downloadURL) {
     const relativePath = String(downloadURL).trim().replace(`${HOST_NAME}/`, '')
     console.log(relativePath)
-    return path.join(BUCKET_PATH, relativePath)
+    return path.join(CLOUD_BASE_PATH, relativePath)
 }
 
 
@@ -72,4 +73,14 @@ export async function separateFilenameAndExt(filename) {
         name: parsedPath.name,
         ext: parsedPath.ext
     };
+};
+
+
+export async function getCloudPath() {
+    const platform = os.platform();
+    if (platform === 'win32') {
+        return path.join('c:', 's3b-cloud')
+    } else if (platform === 'linux') {
+        return path.join('/', 'volume', 's3b-cloud')
+    }
 };

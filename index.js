@@ -41,7 +41,7 @@ app.use(cors({ credentials: true, origin: config.TRUSTED_HOST }));
 
 // Static Dir
 app.use(express.static('./public'));
-app.use(express.static(config.BUCKET_PATH));
+app.use(express.static(config.CLOUD_BASE_PATH));
 
 
 

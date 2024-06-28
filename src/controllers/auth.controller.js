@@ -13,7 +13,7 @@ import { response } from "../libs/response.js";
 import { hashPassword, comparePassword } from "../libs/crypto.js";
 import { getExpiryTime } from "../libs/timeConverter.js";
 import { User } from '../db/index.js';
-import { ACCESS_TOKEN_EXPIRY, ACCESS_TOKEN_SECRET, DEBUG } from '../../s3b.config.js';
+import { ACCESS_TOKEN_EXPIRY, ACCESS_TOKEN_SECRET } from '../../s3b.config.js';
 import { AuthToken } from '../constants.js';
 
 
@@ -141,8 +141,7 @@ export const LoginUser = async (req, res) => {
             accessToken,
             {
                 httpOnly: true,
-                expires: getExpiryTime(ACCESS_TOKEN_EXPIRY),
-                secure: !DEBUG,
+                expires: getExpiryTime(ACCESS_TOKEN_EXPIRY)
             }
         )
 

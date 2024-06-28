@@ -1,6 +1,6 @@
 {
 	"name": "s3b-server",
-	"version": "0.1.0",
+	"version": "0.0.5",
 	"description": "Coding Samrat Backend Server",
 	"main": "index.js",
 	"type": "module",
