@@ -79,7 +79,7 @@ export async function separateFilenameAndExt(filename) {
 export async function getCloudPath() {
     const platform = os.platform();
     if (platform === 'win32') {
-        return path.join('c:', 's3b-cloud')
+        return path.join(os.homedir(), 's3b-cloud')
     } else if (platform === 'linux') {
         return path.join('/', 'volume', 's3b-cloud')
     }
