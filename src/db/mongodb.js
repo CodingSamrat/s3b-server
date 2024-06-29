@@ -12,28 +12,15 @@ export const mongodbConfig = async () => {
 
 const userSchema = new Schema(
     {
-        fullName: {
-            type: String,
-        },
         username: {
             type: String,
             required: true,
             index: true,
         },
-        email: {
-            type: String,
-        },
         password: {
             type: String,
             required: true,
-        },
-        mobile: {
-            type: String,
-        },
-
-        isAdmin: {
-            type: Boolean,
-        },
+        }
     },
     {
         timestamps: true
@@ -41,7 +28,7 @@ const userSchema = new Schema(
 )
 const bucketSchema = new Schema(
     {
-        projectName: {
+        name: {
             type: String,
             required: true,
         },

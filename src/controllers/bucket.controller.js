@@ -27,21 +27,21 @@ import { BUCKET_PATH } from "../../s3b.config.js";
 // Access       : protected [admin]
 // =================================================================================
 export const CreateBucket = async (req, res) => {
-    const { projectName } = await req.body
+    const { name } = await req.body
 
 
     try {
-        if (!projectName) {
+        if (!name) {
             return response(res, 400, { error: 'Project name is required!' })
         }
 
         const { apiKey, apiSecret } = await generateApiKeyAndSecret()
-        let bucketId = await generateBucketId(slugify(projectName))
+        let bucketId = await generateBucketId(slugify(name))
         let bucketPath = path.join(BUCKET_PATH, bucketId)
 
 
         while (directoryExists(bucketPath)) {
-            bucketId = await generateBucketId(slugify(projectName))
+            bucketId = await generateBucketId(slugify(name))
             bucketPath = path.join(BUCKET_PATH, bucketId)
         }
 
@@ -49,7 +49,7 @@ export const CreateBucket = async (req, res) => {
 
 
         const payload = {
-            projectName,
+            name,
             apiKey,
             apiSecret,
             bucketId,
@@ -131,13 +131,14 @@ export const GetAllBucket = async (req, res) => {
 export const DeleteBucketById = async (req, res) => {
     const bucketId = req.params.id
     try {
-        const bucket = await Bucket.deleteOne({ _id: bucketId })
+
+        const bucket = await Bucket.deleteOne({ bucketId })
 
         let bucketPath = path.join(BUCKET_PATH, bucket.bucketId.toString())
 
         const del = await fs.rmdirSync(bucketPath)
 
-        return response(res, 200, { message: 'Bucket Deleted', bucket })
+        return response(res, 200, { message: 'Bucket Deleted!', bucket })
     } catch (error) {
         console.log(error)
         return response(res, 500, { error: 'Internal Server Error' })

@@ -1,9 +1,10 @@
 import inquirer from 'inquirer';
-import { logoutUser } from '../helper/authentication.js';
-import AdminPanel from '../index.js';
+import { show } from '../../libs/log.js';
 import { CliBucketRoute } from './bucket.route.js';
-import { getAllUsers } from '../helper/user.js';
-import { CliUserRoute } from './user.route.js';
+import { createBucket } from '../helper/bucket.js';
+import { createBucketPrompt } from '../prompts/bucket.prompt.js';
+import AdminPanel from '../index.js';
+import { logoutUser } from '../helper/authentication.js';
 
 
 export async function CliHomeRoute() {
@@ -13,9 +14,8 @@ export async function CliHomeRoute() {
             name: 'action',
             message: 'What would you like to do?',
             choices: [
-                { name: '> Bucket', value: 'bucket' },
-                { name: '> User', value: 'user' },
-                { name: '> Update Password', value: 'password' },
+                { name: '> List Bucket', value: 'b_list' },
+                { name: '> Create Bucket', value: 'b_create' },
                 { name: '> Logout', value: 'logout' },
                 { name: '> Exit', value: 'exit' }
             ],
@@ -24,23 +24,43 @@ export async function CliHomeRoute() {
 
 
     switch (answers.action) {
-        case 'bucket':
+        case 'b_list':
+            // go to bucket route
             await CliBucketRoute()
 
+            // Run home route recursively
+            await CliHomeRoute()
             break;
-        case 'user':
-            // const users = await getAllUsers()
-            await CliUserRoute()
+
+
+
+        case 'b_create':
+            // Show prompt to take bucket name
+            const { name } = await createBucketPrompt()
+
+            // create bucket
+            const res = await createBucket(name)
+
+            // Check response
+            if (res?.message) {
+                show(res?.message)
+                console.log('')
+
+                // Run home route recursively
+                await CliHomeRoute()
+            }
 
             break;
-        case 'password':
-            await logoutUser()
-            await AdminPanel()
-            break;
+
+
         case 'logout':
-            await logoutUser()
+            const isDone = await logoutUser()
+            if (isDone) {
+                show('Successfylly logged out')
+            }
             await AdminPanel()
             break;
+
         case 'exit':
             console.log('Goodbye!\n');
             process.exit();

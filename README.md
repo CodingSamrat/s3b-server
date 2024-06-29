@@ -16,7 +16,7 @@ You need to install the repo as a package, so that you can run commands. In orde
 
 ``` bash
 cd s3b-server
-npm i .
+sudo npm i -g . && npm i
 ```
 
 ### Configurations

@@ -5,7 +5,7 @@
 	"main": "index.js",
 	"type": "module",
 	"bin": {
-		"s3b-server": "./src/command/index.js"
+		"s3b": "./src/command/index.js"
 	},
 	"scripts": {
 		"start": "nodemon index.js",

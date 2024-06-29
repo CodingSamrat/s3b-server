@@ -1,6 +1,6 @@
 export default class CLI {
-    constructor(projectName) {
-        this.projectName = projectName
+    constructor(name) {
+        this.name = name
         this.commands = {};
         this.middlewares = [];
     }
@@ -15,7 +15,7 @@ export default class CLI {
     }
 
     help() {
-        console.log(`Usage: ${this.projectName} 'command'\n`);
+        console.log(`Usage: ${this.name} 'command'\n`);
         console.log('Commands:');
         for (const command in this.commands) {
             const { description, args } = this.commands[command];

@@ -2,12 +2,12 @@ import { DATA_PATH } from "../../../s3b.config.js";
 import fs from 'fs'
 import path from 'path'
 import ApiManager from "./apiManager.js";
-import inquirer from 'inquirer';
+import { showError } from "../../libs/log.js";
 
 
 export async function loginUser(username, password) {
     if (!username || !password) {
-        return console.log('Credential missing')
+        return showError('Credential missing')
     }
     try {
         const { data } = await ApiManager.post('/auth/login', { username, password })
@@ -18,7 +18,7 @@ export async function loginUser(username, password) {
         }
         return { success: true }
     } catch (error) {
-        console.log('ERROR:', error?.response?.data?.error)
+        showError(error?.response?.data?.error)
         return { success: false }
     }
 
@@ -31,13 +31,14 @@ export async function logoutUser() {
     try {
         if (fs.existsSync(_getAutPath())) {
             fs.unlinkSync(_getAutPath())
+            return true
         }
     } catch (error) {
-        console.log('ERROR:', error?.message)
+        showError(error?.message)
+        return false
     }
 
 }
-
 
 
 export async function isAuth() {
@@ -51,45 +52,11 @@ export async function isAuth() {
             return false
         }
     } catch (error) {
-        console.log('ERROR:', error?.response?.data?.error)
+        showError(error?.response?.data?.error)
     }
 
 }
 
-export async function promptLogin() {
-    // Define the questions for the login form
-    const questions = [
-        {
-            type: 'input',
-            name: 'username',
-            message: 'Enter your username:',
-            validate: function (value) {
-                if (value.length) {
-                    return true;
-                } else {
-                    return 'Please enter your username.';
-                }
-            }
-        },
-        {
-            type: 'password',
-            name: 'password',
-            message: 'Enter your password:',
-            mask: '*',
-            validate: function (value) {
-                if (value.length) {
-                    return true;
-                } else {
-                    return 'Please enter your password.';
-                }
-            }
-        }
-    ];
-    // Prompt the user with the questions
-    const answers = await inquirer.prompt(questions);
-    return answers;
-
-}
 
 
 
@@ -102,6 +69,8 @@ export async function _getAccessToken() {
         return 0
     }
 }
+
+
 export async function _setAccessToken(token) {
     await fs.writeFileSync(_getAutPath(), token)
 }

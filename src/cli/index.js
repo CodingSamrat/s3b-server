@@ -1,7 +1,7 @@
 import { CliHomeRoute } from "./route/home.route.js";
-import { isAuth, loginUser, promptLogin } from "./helper/authentication.js";
-
-
+import { isAuth, loginUser } from "./helper/authentication.js";
+import userPrompt from "./prompts/user.prompt.js";
+import { show, showError } from '../libs/log.js'
 
 // Entry point of the dashboard
 export default async function AdminPanel() {
@@ -11,14 +11,21 @@ export default async function AdminPanel() {
             await CliHomeRoute()
         }
         else {
-            console.log("")
-            console.log('Login to s3b admin panel-------------------')
-            const { password, username } = await promptLogin()
-            console.log('')
+            console.log('\n 🗝️  Login to s3b admin panel')
+
+            // Show prompt 
+            const { password, username } = await userPrompt()
+
+            // Authenticate user
             const res = await loginUser(username, password)
-            if (res.success) {
+
+            if (res?.success) {
                 await CliHomeRoute()
+            } else {
+                showError('Loging failed')
             }
+
+            // re
         }
     } catch (error) {
         console.log(error)
