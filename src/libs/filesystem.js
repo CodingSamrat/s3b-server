@@ -16,7 +16,8 @@ export function directoryExists(directoryName) {
 
 
 export async function fileExists(filePath) {
-    if (fs.existsSync(filePath)) {
+
+    if (await fs.existsSync(filePath)) {
         return true
     } else {
         return false
@@ -29,15 +30,18 @@ export function getStoragePath(storageId) {
 
 
 export function getDownloadURL(filePath) {
-    const relativePath = filePath.replace(`${CLOUD_BASE_PATH}\\`, '').replace(/\\/g, '/')
-    return `${HOST_NAME}/${relativePath}`
+    const relativePath = filePath.split('bucket')[1].replace(/\\/g, '/')
+    return `${HOST_NAME}/bucket${relativePath}`
 }
 
 
 export async function getFilePath(downloadURL) {
-    const relativePath = String(downloadURL).trim().replace(`${HOST_NAME}/`, '')
-    console.log(relativePath)
-    return path.join(CLOUD_BASE_PATH, relativePath)
+
+    const relativePath = downloadURL.replace(`${HOST_NAME}/`, '')
+    const filePath = path.join(CLOUD_BASE_PATH, relativePath)
+
+
+    return filePath
 }
 
 
@@ -84,3 +88,7 @@ export async function getCloudPath() {
         return path.join('/', 'volume', 's3b-cloud')
     }
 };
+
+
+
+

@@ -8,10 +8,11 @@
 import path from "path";
 import { response } from "../libs/response.js";
 import fs from "fs";
-import { getDownloadURL, separateFilenameAndExt, } from "../libs/filesystem.js";
+import { getDownloadURL, getFilePath, separateFilenameAndExt, } from "../libs/filesystem.js";
 import { directoryExists, fileExists } from "../libs/filesystem.js";
-import { BUCKET_PATH, HOST_NAME } from "../../s3b.config.js";
+import { BUCKET_PATH, CLOUD_BASE_PATH, HOST_NAME } from "../../s3b.config.js";
 import dirTree from "directory-tree";
+import { getFileTree } from "../libs/fileTree.js";
 
 
 
@@ -159,11 +160,10 @@ export const DeleteFile = async (req, res) => {
     const { downloadUrl } = await req.body
 
     try {
-        const relativePath = downloadUrl.replace(`${HOST_NAME}/`, '')
-        const filePath = path.join(BUCKET_PATH, relativePath)
+        const filePath = await getFilePath(downloadUrl)
 
         // Delete file
-        if (fileExists(filePath)) {
+        if (await fileExists(filePath)) {
             fs.unlinkSync(filePath)
         } else {
             return response(res, 404, { error: 'File dose not exist!' })
@@ -195,8 +195,7 @@ export const IsFileExist = async (req, res) => {
 
 
     try {
-        const relativePath = downloadUrl.replace(`${HOST_NAME}/`, '')
-        const filePath = path.join(BUCKET_PATH, relativePath)
+        const filePath = await getFilePath(downloadUrl)
 
         const isExist = await fileExists(filePath)
 
@@ -219,19 +218,21 @@ export const IsFileExist = async (req, res) => {
 
 
 // =================================================================================
-// Name         : getBucketTree
+// Name         : getBucketTree [v1.1.0]
 // Description  : ...
 // Method       : GET
 // Route        : /api/v1/file/get/bucket-tree
 // Access       : protected [admin]
 // =================================================================================
 export const GetBucketTree = async (req, res) => {
-    const { bucketId } = req.bucket
+    const bucketId = req?.bucket?.bucketId
+
+    console.log(bucketId)
     try {
         const bucketPath = path.join(BUCKET_PATH, bucketId)
 
-        let tree = await dirTree(bucketPath);
-        tree = JSON.stringify(tree, null, 2)
+        let tree = await getFileTree(bucketPath);
+        // tree = JSON.stringify(tree, null, 2)
 
         return response(res, 201, { message: 'Bucket Tree!', tree })
     } catch (error) {
@@ -261,30 +262,48 @@ export const ReadDir = async (req, res) => {
 
         const dirPath = path.join(BUCKET_PATH, bucketId, dir)
 
+        if (!await fs.isExist(dirPath)) {
+            return response(res, 404, { error: 'File dose not exist!' })
+        }
 
-        const items = await fs.readdirSync(dirPath)
+        let items = await fs.readdirSync(dirPath)
+        // Custom sort function
 
 
-        items.forEach(async (item, i) => {
+        for (const item of items) {
             const itemPath = path.join(dirPath, item);
             const stat = fs.statSync(itemPath);
 
-            if (stat.isFile()) {
-                const obj = {
-                    isFile: true,
-                    path: itemPath,
-                    name: item
-                }
-                await dirData.push(obj)
-            } else if (stat.isDirectory()) {
-                const obj = {
-                    isFile: false,
-                    path: itemPath,
-                    name: item
-                }
-                await dirData.push(obj)
+            const obj = {
+                isFile: stat.isFile(),
+                path: itemPath,
+                name: item
+            };
+            dirData.push(obj);
+        }
+
+        // Custom sort function
+        dirData.sort((a, b) => {
+            // Sort directories before files
+            if (!a.isFile && b.isFile) return -1;
+            if (a.isFile && !b.isFile) return 1;
+
+            // Special case for 'img.png' to be first among files
+            if (a.isFile && a.name === 'img.png') return -1;
+            if (b.isFile && b.name === 'img.png') return 1;
+
+            // Ensure that both names exist before comparing
+            if (a.name && b.name) {
+                return a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' });
             }
+
+            // Fallback if one of the names is undefined
+            if (!a.name) return -1;
+            if (!b.name) return 1;
+
+            return 0;
         });
+
 
         // dirData = JSON.stringify(dirData, null, 2)
 
