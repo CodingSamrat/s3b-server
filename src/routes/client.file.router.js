@@ -22,7 +22,7 @@ ClientFileRouter.post('/is-exist', apiKeyAuth, IsFileExist)
 ClientFileRouter.post('/read-dir', apiKeyAuth, ReadDir)
 ClientFileRouter.post('/copy', apiKeyAuth, Copy)
 ClientFileRouter.post('/move', apiKeyAuth, Move)
-ClientFileRouter.get('/tree', GetBucketTree) // [v1.1.0]
+ClientFileRouter.get('/tree', apiKeyAuth, GetBucketTree) // [v1.1.0]
 
 
 
