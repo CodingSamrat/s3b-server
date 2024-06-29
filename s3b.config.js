@@ -17,8 +17,7 @@ export const API_BASE = `/api/${API_VERSION}`;
 
 // HOST_NAME defines the hostname for the server including the port number.
 // This should be updated in production or if the server is hosted on a different machine.
-// export const HOST_NAME = `http://localhost:${PORT}`;
-export const HOST_NAME = `http://spidy.codingsamrat.com`;
+export const HOST_NAME = `http://localhost:${PORT}`;
 
 // Path configuration variables
 // CLOUD_BASE_PATH sets the base directory for storing all cloud-related files.
