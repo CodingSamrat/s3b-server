@@ -6,7 +6,7 @@ import { show, showError } from '../../libs/log.js';
 export async function CliBucketRoute() {
     let allBucket = await getAllBucket()
 
-    if (allBucket?.length <= 0) {
+    if (!allBucket || allBucket?.length <= 0) {
         console.log('\n\n------------ Bucket List Empty -----------')
         console.log('         You don\'t have any bucket\n')
 
@@ -17,7 +17,7 @@ export async function CliBucketRoute() {
     else {
         let myChoices = []
 
-        await allBucket.map(async (bucket, i) => {
+        await allBucket?.map(async (bucket, i) => {
             const paddedName = bucket.name.padEnd(15, ' ');
             await myChoices.push({ name: `${i + 1}. ${paddedName} [${bucket.bucketId}]`, value: bucket.bucketId })
         })

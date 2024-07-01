@@ -11,7 +11,7 @@ export default async function AdminPanel() {
             await CliHomeRoute()
         }
         else {
-            console.log('\n 🗝️  Login to s3b admin panel')
+            console.log('\n 🗝️  Login to s3b admin panel 🔒')
 
             // Show prompt 
             const { password, username } = await userPrompt()
@@ -22,8 +22,9 @@ export default async function AdminPanel() {
             if (res?.success) {
                 await CliHomeRoute()
             } else {
-                showError('Loging failed')
+                showError('Login failed')
             }
+
 
             // re
         }
