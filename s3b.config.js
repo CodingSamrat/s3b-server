@@ -10,7 +10,7 @@ import { getCloudPath } from "./src/libs/filesystem.js";
 
 // Server configuration variables
 // PORT specifies the port number on which the server will listen for incoming requests.
-export const PORT = DYNAMIC_PORT;
+export const PORT = 8800;
 
 // API_VERSION is used to version the API endpoints. This allows for backward compatibility if the API changes in the future.
 export const API_VERSION = "v1";
