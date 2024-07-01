@@ -7,7 +7,7 @@
 
 /public/files
 *.code-workspace
-
+.s3b
 .env
 .env.local
 .vscode
