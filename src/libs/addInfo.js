@@ -4,11 +4,10 @@ import { hashPassword } from "./crypto.js";
 
 export async function createAdminUser() {
     const allUser = await User.find()
+    const rootUser = await User.findOne({ username: 'root' })
 
 
-    if (allUser?.length > 0) {
-        return
-    }
+    if (rootUser) return
 
 
     for (let i = 0; i < allUser.length; i++) {
