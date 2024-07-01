@@ -20,6 +20,7 @@ import config from './s3b.config.js'
 import BucketRouter from './src/routes/bucket.router.js'
 import ClientFileRouter from './src/routes/client.file.router.js'
 import AuthRouter from './src/routes/auth.route.js'
+import { createAdminUser } from "./src/libs/addInfo.js";
 
 // Express Server
 const app = express();
@@ -62,7 +63,7 @@ app.use(`/`, (req, res) => {
 
 
 
-
+createAdminUser()
 
 
 app.listen(config.PORT, async () => {
