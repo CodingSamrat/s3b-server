@@ -113,7 +113,7 @@ export const LoginUser = async (req, res) => {
             return response(res, 401, { error: 'All fields are required' })
         }
 
-        await User.find() //... DND
+        console.log(await User.find()) //... DND
 
         // TODO: Check user exist or not
         const user = await User.findOne({ username })
