@@ -10,7 +10,7 @@ import { AuthToken } from "../constants.js";
 const auth = async (req, res, next) => {
     // Access the Authentication Token from cookie or request header
     const token = await req.cookies[AuthToken.ACCESS_TOKEN] || req.header("Authorization")?.replace("Bearer ", "")
-    console.log(token)
+
     // console.log(token)
     // Check if there is any token or not
     if (!token) {

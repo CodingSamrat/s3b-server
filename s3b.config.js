@@ -33,7 +33,7 @@ export const CLOUD_BASE_PATH = await getCloudPath();
 export const BUCKET_PATH = path.join(CLOUD_BASE_PATH, 'bucket');
 
 // DATA_PATH is the directory path where database-related files or other data will be stored.
-export const DATA_PATH = path.resolve('.s3b');
+export const DATA_PATH = path.join(os.homedir(), '.s3b');
 
 // CORS (Cross-Origin Resource Sharing) configuration
 // TRUSTED_HOST is an array of trusted origins. These origins are allowed to make requests to the server.
