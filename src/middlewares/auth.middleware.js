@@ -4,27 +4,13 @@ import { response } from "../libs/response.js";
 import { ACCESS_TOKEN_SECRET } from "../../s3b.config.js";
 import { AuthToken } from "../constants.js";
 
-const createUserObject = (data, keys) => {
-    const keysArray = keys.split(' ');
-    const keysToExclude = new Set();
 
-    keysArray.forEach(key => {
-        if (key.startsWith('-')) {
-            keysToExclude.add(key.slice(1));
-        }
-    });
-
-    return Object.fromEntries(
-        Object.entries(data)
-            .filter(([key, value]) => value !== undefined && !keysToExclude.has(key))
-    );
-};
 
 
 const auth = async (req, res, next) => {
     // Access the Authentication Token from cookie or request header
     const token = await req.cookies[AuthToken.ACCESS_TOKEN] || req.header("Authorization")?.replace("Bearer ", "")
-
+    console.log(token)
     // console.log(token)
     // Check if there is any token or not
     if (!token) {
@@ -50,7 +36,7 @@ const auth = async (req, res, next) => {
         const authUser = await User.findOne({ username: decodedData.username })
 
         // delete user.password
-        const user = createUserObject(authUser, '-password')
+        const user = { _id: authUser._id, username: authUser.username }
 
         if (!user._id) {
             return response(res, 401, { error: 'Invalid Access Token!' })

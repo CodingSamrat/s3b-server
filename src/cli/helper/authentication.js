@@ -63,7 +63,7 @@ export async function isAuth() {
 export async function _getAccessToken() {
 
     if (await fs.existsSync(_getAutPath())) {
-        const token = await fs.readFileSync(_getAutPath())
+        const token = await fs.readFileSync(_getAutPath(), 'utf-8')
         return token
     } else {
         return 0
