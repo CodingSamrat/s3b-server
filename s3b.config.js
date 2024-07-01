@@ -1,4 +1,7 @@
 
+import { config } from "dotenv";
+config()
+
 import path from "path";
 import os from "os";
 import { getCloudPath } from "./src/libs/filesystem.js";
@@ -7,7 +10,7 @@ import { getCloudPath } from "./src/libs/filesystem.js";
 
 // Server configuration variables
 // PORT specifies the port number on which the server will listen for incoming requests.
-export const PORT = "8800";
+export const PORT = DYNAMIC_PORT;
 
 // API_VERSION is used to version the API endpoints. This allows for backward compatibility if the API changes in the future.
 export const API_VERSION = "v1";
@@ -15,9 +18,9 @@ export const API_VERSION = "v1";
 // API_BASE constructs the base URL for the API endpoints using the version number.
 export const API_BASE = `/api/${API_VERSION}`;
 
-// HOST_NAME defines the hostname for the server including the port number.
+// HOST_URL defines the hostname for the server including the port number.
 // This should be updated in production or if the server is hosted on a different machine.
-export const HOST_NAME = `http://spidy.codingsamrat.com`;
+export const HOST_URL = process.env.HOST_URL;
 
 // Path configuration variables
 // CLOUD_BASE_PATH sets the base directory for storing all cloud-related files.
@@ -59,18 +62,18 @@ export const DATABASE = 'filexdb';
 // Authentication configuration
 // ACCESS_TOKEN_SECRET is a secret key used for signing and verifying JSON Web Tokens (JWT).
 // This should be a strong, unique and long.
-export const ACCESS_TOKEN_SECRET = 'uDKseoo1/6xmHYYU/d5pBkcUofnYZVMPcReybIuoS5y147Z3MS';
+export const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 
 // ACCESS_TOKEN_EXPIRY defines the expiration time for the access tokens.
 // This can be set to control how long a token remains valid before the user needs to re-authenticate.
-export const ACCESS_TOKEN_EXPIRY = '1d';
+export const ACCESS_TOKEN_EXPIRY = '5m';
 
 // Export default object containing all configurations
 export default {
     PORT,
     API_VERSION,
     API_BASE,
-    HOST_NAME,
+    HOST_URL,
     CLOUD_BASE_PATH,
     BUCKET_PATH,
     DATA_PATH,

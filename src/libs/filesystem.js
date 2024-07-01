@@ -2,7 +2,7 @@ import os from 'os'
 import fs from 'fs'
 import path from 'path';
 
-import { HOST_NAME, BUCKET_PATH, CLOUD_BASE_PATH } from "../../s3b.config.js";
+import { HOST_URL, BUCKET_PATH, CLOUD_BASE_PATH } from "../../s3b.config.js";
 
 export function directoryExists(directoryName) {
     try {
@@ -31,13 +31,13 @@ export function getStoragePath(storageId) {
 
 export function getDownloadURL(filePath) {
     const relativePath = filePath.split('bucket')[1].replace(/\\/g, '/')
-    return `${HOST_NAME}/bucket${relativePath}`
+    return `${HOST_URL}/bucket${relativePath}`
 }
 
 
 export async function getFilePath(downloadURL) {
 
-    const relativePath = downloadURL.replace(`${HOST_NAME}/`, '')
+    const relativePath = downloadURL.replace(`${HOST_URL}/`, '')
     const filePath = path.join(CLOUD_BASE_PATH, relativePath)
 
 

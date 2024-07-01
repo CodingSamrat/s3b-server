@@ -4,6 +4,15 @@ s3b-server is a robust and flexible server implementation for self-hosted S3 buc
 
 ## Installation
 
+``` bash
+curl -O https://raw.githubusercontent.com/codingsamrat/s3b-server/v1.0.0/install.sh
+```
+
+``` bash
+curl -s "https://api.github.com/repos/codingsamrat/s3b-server/releases/latest" | jq -r ".assets[] | select(.name == install.sh) | .browser_download_url"
+```
+
+
 ### Clone repository
 To install `s3b-server` clone the GitHub repository.
 ``` bash
@@ -22,7 +31,7 @@ sudo npm i -g . && npm i
 ### Configurations
 The `s3b.config.js` file contains all configurations for the server. some configurations needs to be modified. 
 
- - **HOST_NAME** = Change the HOST_NAME with your actual host name. The client will connect to the bucket through this host name. 
+ - **HOST_URL** = Change the HOST_URL with your actual host name. The client will connect to the bucket through this host name. 
 Ex: `https://cdn.example.com` . And it will serve all files over the internet.
  - **CLOUD_BASE_PATH** = This is the physical path on drive, where all files and data will be stored. By default it use `/volume/s3b-server` for _linux_ & `C://s3b-server` for _windows_. Make user user has permission to CLOUD_BASE_PATH. Safest way is create & give permission to user for CLOUD_BASE_PATH.
    

@@ -5,7 +5,8 @@
 // =================================================================================
 
 
-
+import { config as envConfig } from "dotenv";
+envConfig()
 
 import express from 'express'
 import cookieParser from 'cookie-parser'
@@ -69,6 +70,6 @@ app.listen(config.PORT, async () => {
     console.log(' |                    🪴                  |')
     console.log(" |                s3b server             |")
     console.log('=|=======================================|=')
-    console.log(`\n⚙️  Server is up & running on ${config.HOST_NAME} ✓`)
+    console.log(`\n⚙️  Server is up & running on http://localhost:${config.PORT} ✓`)
 })
 

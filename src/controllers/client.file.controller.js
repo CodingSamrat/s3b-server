@@ -10,7 +10,7 @@ import { response } from "../libs/response.js";
 import fs from "fs";
 import { getDownloadURL, getFilePath, separateFilenameAndExt, } from "../libs/filesystem.js";
 import { directoryExists, fileExists } from "../libs/filesystem.js";
-import { BUCKET_PATH, CLOUD_BASE_PATH, HOST_NAME } from "../../s3b.config.js";
+import { BUCKET_PATH } from "../../s3b.config.js";
 import dirTree from "directory-tree";
 import { getFileTree } from "../libs/fileTree.js";
 
