@@ -2,6 +2,7 @@ import inquirer from 'inquirer';
 import { getAllBucket, deleteBucket } from '../helper/bucket.js';
 import { deleteBucketPrompt } from '../prompts/bucket.prompt.js';
 import { show, showError } from '../../libs/log.js';
+import { CliHomeRoute } from './home.route.js';
 
 export async function CliBucketRoute() {
     let allBucket = await getAllBucket()
@@ -91,7 +92,7 @@ export async function CliBucketRoute() {
                 }
             }
             else if (answers.action === 'back') {
-                await CliBucketRoute()
+                await CliHomeRoute()
             }
             else if (answers.action === 'exit') {
                 console.log('Goodbye!\n');

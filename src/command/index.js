@@ -1,15 +1,19 @@
 #!/usr/bin/env node
 import CLI from '../libs/cli.js'
-import { addUser } from './commands/add-user.js';
-import adminPanel from './commands/admin-panel.js';
-import keyGen from './commands/key-gen.js';
+import { resetAdminPassword, } from './helper/user.helper.js';
+import keyGen from './helper/key-gen.js';
+import AdminPanel from '../admin-panel/index.js';
 
-const cli = new CLI('s3b-server');
+const cmd = new CLI('s3b');
 
 
-cli.command('adduser', 'Create an user', addUser);
-cli.command('admin', 'admin cli dashboard', adminPanel);
-cli.command('keygen', 'Generate secret key for jwt', keyGen);
+
+cmd.command('reset-admin', 'Reset the admin password', resetAdminPassword);
+cmd.command('admin <username>', 'login to cli admin panel', AdminPanel);
+cmd.command('keygen', 'Generate secret key for jwt', keyGen);
 
 // Parse the command-line arguments
-cli.parse(process.argv);
+cmd.parse(process.argv);
+
+
+

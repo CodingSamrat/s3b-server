@@ -66,7 +66,7 @@ export const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 
 // ACCESS_TOKEN_EXPIRY defines the expiration time for the access tokens.
 // This can be set to control how long a token remains valid before the user needs to re-authenticate.
-export const ACCESS_TOKEN_EXPIRY = '5m';
+export const ACCESS_TOKEN_EXPIRY = '1m';
 
 // Export default object containing all configurations
 export default {

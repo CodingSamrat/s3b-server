@@ -72,6 +72,9 @@ ACCESS_TOKEN_SECRET=uDKseoo1/6xmHYYU/d5pBkcUofnYZVMPcReybIuoS5y147Z3MS
 # Make .env file secure
 chmod 600 .env
 
+node ./src/libs/create-admin-user.js
+
+
 # Clean up install.sh if no longer needed
 echo ""
 echo "> Cleaning up project..."

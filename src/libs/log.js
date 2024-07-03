@@ -1,6 +1,6 @@
 export function showError(msg) {
-    console.error(`\nERROR: ${msg}`)
+    console.error(`❌ ERROR: ${msg}`)
 }
 export function show(msg) {
-    console.log(`\n>  ${msg}`)
+    console.log(`🪵>  ${msg}`)
 }

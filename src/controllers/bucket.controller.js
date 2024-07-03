@@ -106,7 +106,7 @@ export const GetAllBucket = async (req, res) => {
     try {
         const allBucket = await Bucket.find()
 
-
+        console.log(object)
         return response(res, 200, { message: `${allBucket.length} Bucket found`, allBucket })
     } catch (error) {
         console.log(error)

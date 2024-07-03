@@ -71,7 +71,12 @@ export default class CLI {
             const argName = arg.replace(/[<>[\]]/g, '');
             if (arg.startsWith('<')) {
                 if (argv[argIndex] === undefined) {
-                    return { error: `Missing required argument: ${argName}` };
+                    return {
+                        error: `
+❌ ERROR: Missing required argument: ${argName}
+... ... ... ... ... ... ... ... ... ... ... ... ... ...\ 
+                        `
+                    };
                 }
                 parsedArgs[argName] = argv[argIndex];
             } else if (arg.startsWith('[')) {

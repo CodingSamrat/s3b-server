@@ -1,10 +1,10 @@
 import inquirer from 'inquirer';
-import { show } from '../../libs/log.js';
+import { show, showError } from '../../libs/log.js';
 import { CliBucketRoute } from './bucket.route.js';
 import { createBucket } from '../helper/bucket.js';
 import { createBucketPrompt } from '../prompts/bucket.prompt.js';
 import AdminPanel from '../index.js';
-import { logoutUser } from '../helper/authentication.js';
+import { logoutUser } from '../helper/auth.js';
 
 
 export async function CliHomeRoute() {
@@ -44,6 +44,13 @@ export async function CliHomeRoute() {
             // Check response
             if (res?.message) {
                 show(res?.message)
+                console.log('')
+
+                // Run home route recursively
+                await CliHomeRoute()
+            }
+            if (res?.error) {
+                showError(res?.error)
                 console.log('')
 
                 // Run home route recursively

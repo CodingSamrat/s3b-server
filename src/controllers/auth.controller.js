@@ -28,7 +28,7 @@ import { AuthToken } from '../constants.js';
 // =================================================================================
 export const CreateUser = async (req, res) => {
     try {
-        const { fullName, username, email, password, mobile, isAdmin } = await req.body
+        const { username, password } = await req.body
 
         // console.log(await req.body)
 
@@ -45,12 +45,8 @@ export const CreateUser = async (req, res) => {
 
         const user = await User.create(
             {
-                fullName,
                 username,
-                email,
                 password: await hashPassword(password),
-                mobile,
-                isAdmin
             }
         )
 
@@ -122,10 +118,14 @@ export const LoginUser = async (req, res) => {
             return response(res, 404, { error: 'No user found!' })
         }
 
-
+        console.log(password, user.password)
         // TODO: Check Password
-        if (!(await comparePassword(password, user.password))) {
-            return response(res, 401, { error: 'Invalid password' })
+        try {
+            if (!(await comparePassword(password, user.password))) {
+                return response(res, 401, { error: 'Invalid password' })
+            }
+        } catch (error) {
+            password, user.password
         }
 
 
