@@ -1,9 +1,20 @@
 // adminPrompt.js
+import inquirer from 'inquirer';
 import { userPrompt } from '../../admin-panel/prompts/user.prompt.js';
 import { User } from '../../db/index.js';
 import { hashPassword } from '../../libs/crypto.js';
 import { show, showError } from '../../libs/log.js';
+import { CURRENT_USER } from '../constant.js';
 
+
+export async function getAllUser() {
+    try {
+        const users = await User.find()
+        return users
+    } catch (error) {
+        showError(error?.message)
+    }
+}
 
 
 
@@ -19,7 +30,7 @@ export async function addUser() {
         const existingUser = await User.findOne({ username })
 
         if (existingUser?._id) {
-            return showError('\nUsername already exist!')
+            return showError('Username already exist!')
         }
 
         const user = await User.create({
@@ -46,10 +57,37 @@ export async function addUser() {
 
 
 
-export async function removeUser({ username }) {
+export async function removeUser() {
 
     try {
-        console.log(username)
+
+        const answers = await inquirer.prompt(
+            [
+                {
+                    type: 'input',
+                    name: 'username',
+                    message: 'username:',
+                    validate: function (value) {
+                        if (value.length) {
+                            return true;
+                        } else {
+                            return 'Please enter your username.';
+                        }
+                    }
+                },
+            ]
+        );
+
+        if (answers.username === 'admin') {
+            return showError('admin user can\'t be deleted.')
+        }
+
+        // Prompt the user with the questions
+        const deletedUser = await User.deleteOne({ username: answers.username })
+
+        if (deletedUser?._id) {
+            show('User removed!')
+        }
 
     } catch (error) {
         showError(error?.message)

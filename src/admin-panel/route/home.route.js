@@ -4,7 +4,8 @@ import { CliBucketRoute } from './bucket.route.js';
 import { createBucket } from '../helper/bucket.js';
 import { createBucketPrompt } from '../prompts/bucket.prompt.js';
 import AdminPanel from '../index.js';
-import { logoutUser } from '../helper/auth.js';
+import { logoutUser, updatePassword } from '../helper/auth.js';
+import { CliUserRoute } from './user.route.js';
 
 
 export async function CliHomeRoute() {
@@ -16,6 +17,8 @@ export async function CliHomeRoute() {
             choices: [
                 { name: '> List Bucket', value: 'b_list' },
                 { name: '> Create Bucket', value: 'b_create' },
+                { name: '> User', value: 'user' },
+                { name: '> Update Password', value: 'update-pass' },
                 { name: '> Logout', value: 'logout' },
                 { name: '> Exit', value: 'exit' }
             ],
@@ -31,7 +34,7 @@ export async function CliHomeRoute() {
             // Run home route recursively
             await CliHomeRoute()
             break;
-
+        //
 
 
         case 'b_create':
@@ -58,15 +61,36 @@ export async function CliHomeRoute() {
             }
 
             break;
+        //
+
+
+
+        case 'user':
+            await CliUserRoute()
+
+            // Run home route recursively
+            await CliHomeRoute()
+            break
+        //
+
+
+        case 'update-pass':
+            await updatePassword()
+
+            // Run home route recursively
+            await CliHomeRoute()
+            break
+        //
+
 
 
         case 'logout':
             const isDone = await logoutUser()
             if (isDone) {
-                show('Successfylly logged out')
+                show('Successfully logged out')
             }
-            await AdminPanel()
-            break;
+            process.exit();
+        //
 
         case 'exit':
             console.log('Goodbye!\n');

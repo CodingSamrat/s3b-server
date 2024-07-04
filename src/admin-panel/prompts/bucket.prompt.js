@@ -28,10 +28,9 @@ export async function createBucketPrompt() {
 }
 export async function deleteBucketPrompt() {
 
-    console.log('-|--------------------------------------------------------------|-')
-    console.log('-|           ⚠︎  Do you really want to delete bucket ⚠︎           |-')
-    console.log('-|                                                              |-')
-    console.log('-|--------------------------------------------------------------|-')
+    console.log('')
+    console.log('⚠︎  Do you really want to delete bucket')
+    console.log("'''''''''''''''''''''''''''''''''''''''''''''''")
 
     const questions = [
         {
