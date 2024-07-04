@@ -12,14 +12,13 @@ import express from 'express'
 import cookieParser from 'cookie-parser'
 import bodyParser from 'body-parser'
 import cors from 'cors'
-import path from 'path'
 import config from './s3b.config.js'
 
 
 
-import BucketRouter from './src/routes/bucket.router.js'
 import ClientFileRouter from './src/routes/client.file.router.js'
-import AuthRouter from './src/routes/auth.route.js'
+import { getVersion } from "./src/libs/version.js";
+
 
 // Express Server
 const app = express();
@@ -48,16 +47,9 @@ app.use(express.static(config.CLOUD_BASE_PATH));
 
 
 // API Routes
-app.use(`${config.API_BASE}/auth`, AuthRouter);
-app.use(`${config.API_BASE}/bucket`, BucketRouter);
+
 app.use(`${config.API_BASE}/client/file`, ClientFileRouter);
 
-
-// Static Routes
-// Home page
-app.use(`/`, (req, res) => {
-    res.sendFile(path.join(path.resolve('public'), 'template', 'index.html'))
-});
 
 
 
@@ -66,10 +58,10 @@ app.use(`/`, (req, res) => {
 
 
 app.listen(config.PORT, async () => {
-    console.log('=|=======================================|=')
-    console.log(' |                    🪴                  |')
-    console.log(" |                s3b server             |")
-    console.log('=|=======================================|=')
+    console.log('')
+    console.log('s3b-server')
+    console.log('version -', await getVersion())
+    console.log("-------------------------------------")
     console.log(`\n⚙️  Server is up & running on http://localhost:${config.PORT} ✓`)
 })
 

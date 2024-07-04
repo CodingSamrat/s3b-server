@@ -4,7 +4,6 @@ import { userPrompt } from '../../admin-panel/prompts/user.prompt.js';
 import { User } from '../../db/index.js';
 import { hashPassword } from '../../libs/crypto.js';
 import { show, showError } from '../../libs/log.js';
-import { CURRENT_USER } from '../constant.js';
 
 
 export async function getAllUser() {
