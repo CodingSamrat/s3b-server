@@ -63,10 +63,9 @@ export async function CliHomeRoute() {
         case 'logout':
             const isDone = await logoutUser()
             if (isDone) {
-                show('Successfylly logged out')
+                show('Successfully logged out')
             }
-            await AdminPanel()
-            break;
+            process.exit();
 
         case 'exit':
             console.log('Goodbye!\n');
