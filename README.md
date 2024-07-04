@@ -5,81 +5,48 @@ s3b-server is a robust and flexible server implementation for self-hosted S3 buc
 ## Installation
 
 ``` bash
-curl -O https://raw.githubusercontent.com/codingsamrat/s3b-server/v1.0.0/install.sh
-```
-
-``` bash
-curl -s "https://api.github.com/repos/codingsamrat/s3b-server/releases/latest" | jq -r ".assets[] | select(.name == install.sh) | .browser_download_url"
-```
-
-
-### Clone repository
-To install `s3b-server` clone the GitHub repository.
-``` bash
+# Clone the repository
 git clone https://github.com/CodingSamrat/s3b-server.git
-```
 
-
-### Install server
-You need to install the repo as a package, so that you can run commands. In order to do this  run install command. 
-
-``` bash
+# Change directory to s3b-server
 cd s3b-server
-sudo npm i -g . && npm i
+
+# Run install script
+# linux -
+bash install.sh
+
+# windows -
+install.bat
+
 ```
+
+
+## CLI Admin Panel
+s3b-server has a beautiful CLI Admin panel. Where you can create or manage Buckets and Users. An admin user will be created while installation. 
+
+
 
 ### Configurations
-The `s3b.config.js` file contains all configurations for the server. some configurations needs to be modified. 
-
- - **HOST_URL** = Change the HOST_URL with your actual host name. The client will connect to the bucket through this host name. 
-Ex: `https://cdn.example.com` . And it will serve all files over the internet.
- - **CLOUD_BASE_PATH** = This is the physical path on drive, where all files and data will be stored. By default it use `/volume/s3b-server` for _linux_ & `C://s3b-server` for _windows_. Make user user has permission to CLOUD_BASE_PATH. Safest way is create & give permission to user for CLOUD_BASE_PATH.
-   
-**Create Directory**
-``` bash
-sudo mkdir -p /volume/s3b-server
-```
-   
-**Change owner**
-``` bash
-chown -R username /volume/s3b-server # change username
-```
-Now you are good to go. Go through all other properties as well.
-
-
+Before running the server open `.env` and replace the `HOST_URL` with your actual host name (Ex: https://cdn.example.com). By default server will be running on localhost 8800 prot. You can use reverse proxy to serve the server.
 
 
 
 
 ## Run server
-You can run the server now, by command `npm start`. The server will boot up on `http://localhost:8800`. 
-
+Now run the server using [pm2](https://www.npmjs.com/package/pm2). pm2 will be installed during s3b-server installation.
 ``` bash
-npm start 
-
-# or use pm2
-npm install pm2 -g
-pm2 start index.js
+pm2 start index.js -n s3b
 ```
 
 
 
 ## CLI Admin Panel
-s3b-server has a beautiful CLI Admin panel. Where you can create or manage Buckets and Users. To access the CLI Admin Panel a Admin User is needed. So create the Amin user first. 
+s3b-server has a beautiful CLI Admin panel. Where you can create or manage Buckets and Users. Default login credential is `admin` for both username & password.
 
-
-#### Create Admin User
-After running server to create Admin User open another terminal on the same directory, and run:
-
-``` bash
-s3b-server create-admin-user
+To access admin panel, run:
+``` bash 
+s3b admin admin     # s3b admin <username> 
 ```
-
-Now you can login to the CLI Admin Panel. run:
-``` bash
-s3b-server admin
-```
-
 
 
 

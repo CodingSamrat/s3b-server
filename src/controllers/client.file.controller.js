@@ -20,74 +20,6 @@ import { getFileTree } from "../libs/fileTree.js";
 
 
 
-// =================================================================================
-// Name         : UploadMultipleFile
-// Description  : upload File
-// Method       : POST
-// Route        : /api/v1/file/upload
-// Access       : protected [admin]
-// =================================================================================
-export const UploadMultipleFile = async (req, res) => {
-    return response(res, 201, { message: 'This feature is not available now' })
-    const { dir } = await req.body
-    const file = req.files
-
-    console.log(file)
-    const { bucketId } = req.bucket
-    try {
-        let finalDir = path.join(BUCKET_PATH, bucketId, dir)
-        let finalDestination = path.join(BUCKET_PATH, bucketId, dir, file.filename)
-        let relativePath = path.join(bucketId, dir, file.filename)?.replace(/\\/g, '/');
-
-
-
-        if (!directoryExists(finalDir)) {
-            await fs.mkdirSync(finalDir, { recursive: true })
-        }
-
-        const separateFilenameAndExt = (filename) => {
-            const parsedPath = path.parse(filename);
-            return {
-                name: parsedPath.name,
-                ext: parsedPath.ext
-            };
-        };
-
-
-        let i = 1
-        while (await fileExists(finalDestination)) {
-            const { name, ext } = separateFilenameAndExt(file.filename)
-            const filename = `${name}_${i}${ext}`
-            finalDestination = path.join(BUCKET_PATH, bucketId, dir, filename)
-            i++
-        }
-
-
-        // ...
-        // await fs.renameSync(path.resolve(file.path), finalDestination)
-
-        // Copy the file
-        await fs.copyFileSync(path.resolve(file.path), finalDestination);
-
-        // Remove the original file
-        await fs.unlinkSync(path.resolve(file.path));
-
-        if (!fileExists(finalDestination)) {
-            return response(res, 400, { error: 'Internal Server Error' })
-        }
-
-        console.log()
-        const downloadURL = getDownloadURL(finalDestination)
-
-        return response(res, 200, { message: 'File uploaded!', downloadURL })
-    } catch (error) {
-        console.log(error)
-        return response(res, 500, { error: 'Internal Server Error' })
-    }
-}
-
-
-
 
 
 // =================================================================================
@@ -98,27 +30,26 @@ export const UploadMultipleFile = async (req, res) => {
 // Access       : protected [admin]
 // =================================================================================
 export const UploadFile = async (req, res) => {
-    const { dir } = await req.body
+    const { filePath } = await req.body
     const { bucketId } = req.bucket
     const file = req.file
 
     try {
-        let finalDir = path.join(BUCKET_PATH, bucketId, dir)
-        let finalDestination = path.join(BUCKET_PATH, bucketId, dir, file.filename)
+        let finalDestination = path.join(BUCKET_PATH, bucketId, filePath)
+        let filename = path.basename(finalDestination)
 
 
-
-        if (!directoryExists(finalDir)) {
-            await fs.mkdirSync(finalDir, { recursive: true })
+        if (!directoryExists(path.dirname(finalDestination))) {
+            await fs.mkdirSync(path.dirname(finalDestination), { recursive: true })
         }
 
 
         let i = 1
         while (await fileExists(finalDestination)) {
-            const { name, ext } = await separateFilenameAndExt(file.filename)
+            const { name, ext } = await separateFilenameAndExt(filename)
 
-            const filename = `${name}_${i}${ext}`
-            finalDestination = path.join(BUCKET_PATH, bucketId, dir, filename)
+            const _filename = `${name}_${i}${ext}`
+            finalDestination = path.join(path.dirname(finalDestination), _filename)
             i++
         }
 

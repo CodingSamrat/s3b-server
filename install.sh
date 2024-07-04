@@ -79,4 +79,5 @@ node ./src/libs/create-admin-user.js
 echo ""
 echo "> Cleaning up project..."
 rm install.sh
+rm install.bat
 echo "> Done."

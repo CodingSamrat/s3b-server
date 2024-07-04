@@ -16,7 +16,6 @@ const ClientFileRouter = express.Router();
 
 // "/api/v1/file/upload
 ClientFileRouter.post('/upload', apiKeyAuth, upload.single('file'), UploadFile)
-// ClientFileRouter.post('/upload-many', apiKeyAuth, upload.array('file', 10), UploadMultipleFile)
 ClientFileRouter.post('/delete', apiKeyAuth, DeleteFile)
 ClientFileRouter.post('/is-exist', apiKeyAuth, IsFileExist)
 ClientFileRouter.post('/read-dir', apiKeyAuth, ReadDir)
