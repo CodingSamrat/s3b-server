@@ -19,6 +19,7 @@ import { show } from "./log.js";
 
     const user = await User.create({
         username: uname,
+        isAdmin: true,
         password: await hashPassword(uname)
     })
 

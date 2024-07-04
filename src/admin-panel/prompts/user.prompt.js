@@ -51,7 +51,7 @@ export async function userPrompt() {
 }
 
 
-export async function passwordPrompt() {
+export async function passwordPrompt(cnf = false) {
     const questions = [
 
         {
@@ -70,7 +70,29 @@ export async function passwordPrompt() {
     ];
     // Prompt the user with the questions
     const answers = await inquirer.prompt(questions);
-    return answers;
+
+    if (!cnf) return answers;
+
+    const cnfQuestions = [
+
+        {
+            type: 'password',
+            name: 'cnfPassword',
+            message: 'confirm password:',
+            mask: '*',
+            validate: function (value) {
+                if (value.length) {
+                    return true;
+                } else {
+                    return 'Please enter your password.';
+                }
+            }
+        }
+    ];
+    // Prompt the user with the questions
+    const cnfAnswers = await inquirer.prompt(cnfQuestions);
+
+    return { ...answers, ...cnfAnswers };
 
 }
 

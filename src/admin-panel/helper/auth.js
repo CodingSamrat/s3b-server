@@ -2,24 +2,27 @@ import { ACCESS_TOKEN_EXPIRY, ACCESS_TOKEN_SECRET, DATA_PATH } from "../../../s3
 import fs from 'fs'
 import path from 'path'
 import { User } from "../../db/index.js"
-import { comparePassword } from "../../libs/crypto.js"
-import { showError } from "../../libs/log.js"
-import { SetCurrentUser } from "../constant.js"
+import { comparePassword, hashPassword } from "../../libs/crypto.js"
+import { show, showError } from "../../libs/log.js"
+import { getCurrentUser, SetCurrentUser } from "../constant.js"
 import { passwordPrompt } from "../prompts/user.prompt.js"
 import jwt from 'jsonwebtoken'
+import inquirer from "inquirer";
 
 export async function loginUser(username) {
     console.log('\n 🗝️  Enter password for user -', username)
     const { password } = await passwordPrompt()
 
     if (!username || !password) {
-        return showError('Invalid Credential!')
+        showError('Invalid Credential!')
+        return false
     }
 
     const user = await User.findOne({ username })
 
     if (!user._id) {
-        return showError('No user found!')
+        showError('No user found!')
+        return false
     }
 
     // console.log(password, user.password)
@@ -27,7 +30,8 @@ export async function loginUser(username) {
     let isSuccess = false
     try {
         if (!(await comparePassword(password, user.password))) {
-            return showError('Invalid password')
+            showError('Invalid password')
+            return false
         }
 
 
@@ -55,6 +59,14 @@ export async function loginUser(username) {
         }
 
         SetCurrentUser(user)
+
+
+
+        if (await comparePassword('admin', user.password)) {
+            await changeAdminPassword(username)
+            await loginUser(username)
+        }
+
         return true
     }
     else {
@@ -62,6 +74,35 @@ export async function loginUser(username) {
         return false
     }
 }
+
+
+export async function changeAdminPassword(username) {
+    console.log()
+    console.log('Welcome to s3b-server cli admin panel!!!')
+    console.log('Good to see you :)')
+    console.log('⚠︎  For security reason change your admin password')
+    console.log("'''''''''''''''''''''''''''''''''''''''''''''''''''''''")
+    let prompt = await passwordPrompt(true)
+
+    while (prompt.password !== prompt.cnfPassword) {
+        showError('password doesn\'t match')
+        console.log('Please try again!\n')
+
+        prompt = await passwordPrompt(true)
+    }
+
+    try {
+        const user = await User.updateOne({ username }, { password: await hashPassword(prompt.password) })
+
+        if (user?._id) {
+            show('Admin password has changed!')
+        }
+
+    } catch (error) {
+        showError(error?.message)
+    }
+}
+
 
 
 export async function hasAccess() {
@@ -87,6 +128,63 @@ export async function hasAccess() {
     }
 
 }
+
+export async function updatePassword() {
+    const validatePassword = (input, answers) => {
+        if (input !== answers.newPassword) {
+            return 'Passwords do not match!';
+        }
+        return true;
+    };
+    try {
+        const { username } = await getCurrentUser()
+        console.log(username)
+        const answers = await inquirer.prompt([
+            {
+                type: 'password',
+                name: 'currentPassword',
+                message: 'Enter your current password:',
+                mask: '*',
+                validate: input => input ? true : 'Current password is required'
+            },
+            {
+                type: 'password',
+                name: 'newPassword',
+                message: 'Enter your new password:',
+                mask: '*',
+                validate: input => input ? true : 'New password is required'
+            },
+            {
+                type: 'password',
+                name: 'confirmPassword',
+                message: 'Confirm your new password:',
+                mask: '*',
+                validate: validatePassword
+            }
+        ]);
+
+
+        const oUser = await User.findOne({ username })
+        if (!(await comparePassword(answers.currentPassword, oUser?.password))) {
+            console.log()
+            showError('Incorrect current password!')
+            return
+        }
+
+
+        const user = await User.updateOne({ username }, { password: await hashPassword(answers.newPassword) })
+
+        if (user?._id) {
+            console.log()
+            show(`password updated!`)
+        }
+
+    } catch (error) {
+        console.log(error)
+        showError(error?.message)
+    }
+}
+
 
 
 export async function logoutUser() {
