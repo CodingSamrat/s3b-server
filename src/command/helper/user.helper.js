@@ -10,11 +10,18 @@ export async function resetAdminPassword() {
     show('Resetting admin user password')
 
     try {
-        const admin = await User.findOneAndUpdate({ username }, {
-            password: await hashPassword('admin')
-        })
-
-        if (admin?._id) {
+        const admin = await User.updateOne(
+            {
+                username: 'admin'
+            },
+            {
+                password: await hashPassword('admin')
+            },
+            {
+                new: true
+            }
+        )
+        if (!admin?._id) {
             return showError('Internal error ocurred')
         }
 
@@ -22,6 +29,7 @@ export async function resetAdminPassword() {
         show('Now try to login using admin:admin')
 
     } catch (error) {
+        // console.log(error)
         showError(error?.message)
     }
 };

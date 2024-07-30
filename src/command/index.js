@@ -5,7 +5,7 @@ import keyGen from './helper/key-gen.js';
 import AdminPanel from '../admin-panel/index.js';
 import { getVersion } from '../libs/version.js';
 
-const cmd = new CLI('s3b');
+const cmd = new CLI('s3b-server');
 
 
 

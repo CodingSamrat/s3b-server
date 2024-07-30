@@ -1,7 +1,7 @@
 
 
 import { response } from "../libs/response.js";
-import { Bucket } from "../db/index.js";
+import { AllBuckets } from "../constants.js";
 
 
 export const apiKeyAuth = async (req, res, next) => {
@@ -16,7 +16,7 @@ export const apiKeyAuth = async (req, res, next) => {
     }
 
     try {
-        const bucket = await Bucket.findOne({ apiKey, apiSecret, bucketId });
+        const bucket = await findByAllCredentials(AllBuckets, apiKey, apiSecret, bucketId);
 
         if (!bucket._id) {
             return response(res, 403, { error: 'API key is not valid' })
@@ -33,3 +33,10 @@ export const apiKeyAuth = async (req, res, next) => {
 
 };
 
+const findByAllCredentials = (array, apiKey, apiSecret, bucketId) => {
+    return array.find(item =>
+        item.apiKey === apiKey &&
+        item.apiSecret === apiSecret &&
+        item.bucketId === bucketId
+    );
+};

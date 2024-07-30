@@ -18,6 +18,7 @@ import config from './s3b.config.js'
 
 import ClientFileRouter from './src/routes/client.file.router.js'
 import { getVersion } from "./src/libs/version.js";
+import { fetchAllBucket } from "./src/constants.js";
 
 
 // Express Server
@@ -29,6 +30,7 @@ const app = express();
 // import { mongodbConfig } from './src/models/mongodb.js'
 // mongodbConfig()
 
+fetchAllBucket()
 
 // Parsers...
 app.use(cookieParser());
